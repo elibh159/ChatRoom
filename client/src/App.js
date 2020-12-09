@@ -11,7 +11,7 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <UserContext.Provider>
+        <UserContext.Provider value={{ user, setUser }}>
           <Switch>
             <Route exact path="/" component={Home} />
             <Route path="/" component={Chat} />
