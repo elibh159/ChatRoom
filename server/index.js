@@ -1,9 +1,9 @@
 const app = require('express')();
+var cors = require('cors')
 const http = require('http').createServer(app);
 const socketio = require('socket.io');
 const io = socketio(http);
 const PORT = process.env.PORT || 5000
-
 
 io.on('connection', (socket) => {
   console.log('a user connected');
