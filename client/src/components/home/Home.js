@@ -1,9 +1,18 @@
 import React, { useContext } from 'react'
 import { UserContext } from '../../UserContext';
 import { Link } from 'react-router-dom';
-
+import RoomList from './RoomList';
 const Home = () => {
   const { user, setUser } = useContext(UserContext);
+  const rooms = [
+    {
+      name: 'room1',
+      _id: '123'
+    },
+    {
+      name: 'room2',
+      _id: '234'
+    }]
   const setAsEli = () => {
     const eli = {
       name: 'Eli',
@@ -39,15 +48,19 @@ const Home = () => {
               </form>
             </div>
             <div className="card-action">
-              <a onClick={setAsEli}>set as Eli</a>
-              <a onClick={setAsTom}>set as Tom</a>
+              <a href="/" onClick={setAsEli}>set as Eli</a>
+              <a href="/" onClick={setAsTom}>set as Tom</a>
             </div>
           </div>
         </div>
-        <Link to={'/chat'}>
-          <button>go to chat</button>
-        </Link>
+        <div className="col s6 m5 offset-1">
+          <RoomList rooms={rooms} />
+        </div>
+
       </div>
+      <Link to={'/chat'}>
+        <button>go to chat</button>
+      </Link>
     </div>
 
   )
