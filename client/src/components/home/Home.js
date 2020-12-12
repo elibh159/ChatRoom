@@ -9,7 +9,7 @@ const Home = () => {
   useEffect(() => {
     socket = io(ENDPT);
     return () => {
-      socket.emit('disconnect')
+      socket.emit('disconnect');
       socket.off();
     }
   }, [ENDPT])
@@ -17,11 +17,11 @@ const Home = () => {
   const [room, setRoom] = useState('');
   const handleSubmit = e => {
     e.preventDefault();
-    socket.emit('create-room', room)
+    socket.emit('create-room', room);
     console.log(room);
     setRoom('');
-  }
 
+  }
   const rooms = [
     {
       name: 'room1',
