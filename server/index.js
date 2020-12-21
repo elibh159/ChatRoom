@@ -3,17 +3,22 @@ const mongoose = require('mongoose');
 const http = require('http').createServer(app);
 const socketio = require('socket.io')
 const io = socketio(http);
-const mongodb = "mongodb+srv://sa:Password123@cluster0.rti0s.mongodb.net/chat-database?retryWrites=true&w=majority"
+const mongodb = 'mongodb+srv://sa:Password123@cluster0.rti0s.mongodb.net/chat-database?retryWrites=true&w=majority'
 mongoose.connect(mongodb, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log("connected"))
   .catch(err => console.log(err))
 const { addUser, getUser, removeUser } = require('./helper');
 const PORT = process.env.PORT || 5000
+const Room = require('./models/Room');
 
 io.on('connection', (socket) => {
   console.log(socket.id);
   socket.on('create-room', name => {
     console.log('Then room name received is ', name)
+    const room = new Room({ name });
+    room.save().then(result => {
+      io.emit('room-created', result)
+    })
   })
   socket.on('join', ({ name, room_id, user_id }) => {
     const { error, user } = addUser({
