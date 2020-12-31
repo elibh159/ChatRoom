@@ -8,6 +8,7 @@ mongoose.connect(mongodb, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log("connected"))
   .catch(err => console.log(err))
 const { addUser, getUser, removeUser } = require('./helper');
+const Message = require('./models/Message');
 const PORT = process.env.PORT || 5000
 const Room = require('./models/Room');
 
@@ -46,8 +47,12 @@ io.on('connection', (socket) => {
       text: message
     }
     console.log('message', msgToStore)
-    io.to(user.room_id).emit('message', msgToStore);
-    callback()
+    const msg = new Message(msgToStore);
+    msg.save().then(result => {
+      io.to(user.room_id).emit('message', result);
+      callback()
+    })
+
   })
   socket.on('disconnect', () => {
     const user = removeUser(socket.id);
