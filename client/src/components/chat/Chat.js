@@ -20,26 +20,30 @@ const Chat = () => {
       setMessages([...messages, message])
     })
   }, [messages])
+  useEffect(() => {
+    socket.emit('get-messages-history', room_id)
+    socket.on('output-messages', messages => {
+      setMessages(messages)
+    })
+  }, [])
   const sendMessage = event => {
     event.preventDefault();
     if (message) {
       console.log(message)
-      socket.emit('sendMessage', message, room_id, () =>
-        setMessage(''))
+      socket.emit('sendMessage', message, room_id, () => setMessage(''))
     }
   }
   return (
     <div>
       <div>{room_id} {room_name}</div>
       <h1>Chat {JSON.stringify(user)}</h1>
-      <pre>{JSON.stringify(messages, null, '\t')}/</pre>
+      <pre>{JSON.stringify(messages, null, '\t')}</pre>
       <Messages messages={messages} user_id={user.id} />
       <form action="" onSubmit={sendMessage}>
         <input type="text"
           value={message}
           onChange={event => setMessage(event.target.value)}
-          onKeyPress={event => event.key === 'Enter' ?
-            sendMessage(event) : null}
+          onKeyPress={event => event.key === 'Enter' ? sendMessage(event) : null}
         />
         <button>Send Message</button>
       </form>

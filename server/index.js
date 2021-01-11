@@ -49,10 +49,15 @@ io.on('connection', (socket) => {
     console.log('message', msgToStore)
     const msg = new Message(msgToStore);
     msg.save().then(result => {
-      io.to(user.room_id).emit('message', result);
+      io.to(room_id).emit('message', result);
       callback()
     })
 
+  })
+  socket.on('get-messages-history', room_id => {
+    Message.find({ room_id }).then(result => {
+      socket.emit('output-messages', result)
+    })
   })
   socket.on('disconnect', () => {
     const user = removeUser(socket.id);
